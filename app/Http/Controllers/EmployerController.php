@@ -7,6 +7,15 @@ use Illuminate\Http\Request;
 
 class EmployerController extends Controller
 {
+    /**
+     * redirect admin after login
+     *
+     * @return \Illuminate\View\View
+     */
+    public function dashboard()
+    {
+        return view('employer-dashboard');
+    }
 
     public function createJob()
     {

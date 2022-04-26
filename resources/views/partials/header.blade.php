@@ -58,14 +58,57 @@
                     <ul id="navigation">
                       <li><a href="/">Home</a></li>
                       <li><a href="{{ route('jobs.listing') }}">Find a Job </a></li>
-                      <li><a href="#">For employers </a></li>
+                      <li><a href="{{ route('employer.dashboard') }}">For employers </a></li>
                     </ul>
                   </nav>
                 </div>
                 <!-- Header-btn -->
                 <div class="header-btn d-none f-right d-lg-block">
-                  <a href="#" class="btn head-btn2">Register</a>
-                  <a href="#" class="btn head-btn2">Login</a>
+
+                  @if (Route::has('login'))
+                    <div class="hidden fixed top-0 right-0 px-6 py-4 sm:block">
+                      @auth
+                        {{-- <a href="#"
+                          class="text-primary">
+                          <b><i class="fas fa-user"></i>
+                            {{ auth()->user()->name }}</b></a> --}}
+                        <li class="nav-item dropdown no-arrow">
+                          <a
+                            class="dropdown-toggle"
+                            href="#"
+                            id="userDropdown"
+                            role="button"
+                            data-toggle="dropdown"
+                            aria-haspopup="true"
+                            aria-expanded="false">
+                            <b><i class="fas fa-user"></i>
+                              {{ auth()->user()->name }}</b>
+                          </a>
+                          <!-- Dropdown - User Information -->
+                          <div
+                            class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                            aria-labelledby="userDropdown">
+                            <a class="dropdown-item" href="#"
+                              onclick="event.preventDefault();
+                                                          document.getElementById('logout-form').submit();">
+                              <i
+                                class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                              {{ __('Logout') }}
+                            </a>
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                              @csrf
+                            </form>
+                          </div>
+                        </li>
+                      @else
+                        <a href="{{ route('login') }}" class="btn head-btn2">Login</a>
+
+                        @if (Route::has('register'))
+                          <a href="{{ route('register') }}" class="btn head-btn2">Register</a>
+                        @endif
+                      @endauth
+                    </div>
+                  @endif
                 </div>
               </div>
             </div>
