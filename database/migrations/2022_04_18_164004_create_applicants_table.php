@@ -17,9 +17,16 @@ class CreateApplicantsTable extends Migration
             $table->id();
             $table->string('firstname');
             $table->string('lastname');
+            $table->string('gender');
             $table->string('email')->unique();
             $table->string('phone');
-            $table->string('skills')->default('CV will go here');
+            $table->string('nationality');
+            $table->string('degree');
+            $table->string('experience');
+            $table->string('skills');
+            $table->string('cvTitle');
+            $table->string('cv')->nullable();
+            $table->string('other_files')->nullable();
             $table->timestamps();
         });
     }

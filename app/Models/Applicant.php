@@ -11,6 +11,11 @@ class Applicant extends Model
 
     protected $guarded = [];
 
+    protected $casts = [
+        'other_files' => 'array',
+        'skills' => 'array'
+    ];
+
     public function jobs()
     {
         return $this->belongsToMany(Job::class);
