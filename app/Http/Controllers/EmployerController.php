@@ -6,7 +6,6 @@ use App\Models\Category;
 use App\Models\Employer;
 use App\Models\Job;
 use App\Models\JobRequirement;
-use Illuminate\Http\Request;
 
 class EmployerController extends Controller
 {
@@ -17,7 +16,8 @@ class EmployerController extends Controller
      */
     public function dashboard()
     {
-        return view('employer-dashboard');
+        $companies = auth()->guard('employer')->user()->employers;
+        return view('employer-dashboard', compact('companies'));
     }
 
     public function createJob()
@@ -51,5 +51,29 @@ class EmployerController extends Controller
         ]);
 
         return back()->with('message', 'successfully created job');
+    }
+
+    public function createCompany()
+    {
+        // dd(request()->all());
+        request()->validate([
+            'logo' => 'required|image|mimes:jpg,png,jpeg',
+
+        ]);
+
+        $name = request()->file('logo')->getClientOriginalName();
+        $path = request()->file('logo')->move('img', $name);
+
+        // $save = new Photo;
+        $employer = Employer::create([
+            'employer_user_id' => auth()->guard('employer')->user()->id,
+            'company' => request('companyName'),
+            'location' => request('location'),
+            'email' => request('email'),
+            'description' => request('description'),
+            'logo' => $name
+        ]);
+
+        return back()->with('message', 'successfully created company.');
     }
 }

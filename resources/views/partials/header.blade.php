@@ -23,6 +23,8 @@
   <link rel="stylesheet" href="{{ asset('/css/slick.css') }}">
   <link rel="stylesheet" href="{{ asset('/css/nice-select.css') }}">
   <link rel="stylesheet" href="{{ asset('/css/style.css') }}">
+
+  @yield('extra-js')
 </head>
 
 <body>

@@ -53,7 +53,7 @@
                 <h4>Education + Experience</h4>
               </div>
               <ul>
-                <li>{{ $job->requirement->education_level }} level of education.</li>
+                <li>{{ $job->requirement->education_level }} level of education (or higher).</li>
                 <li>{{ $job->requirement->experience }} of experience (or more).</li>
               </ul>
             </div>

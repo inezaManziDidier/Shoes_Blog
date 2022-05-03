@@ -24,6 +24,7 @@ Route::group(['middleware' => ['auth:employer']], function () {
     Route::get('employer/dashboard', [EmployerController::class, 'dashboard'])->name('employer.dashboard');
     Route::get('employer/create-job', [EmployerController::class, 'createJob'])->name('employer.create-job');
     Route::post('employer/create-job', [EmployerController::class, 'store'])->name('employer.store-job');
+    Route::post('employer/create-company', [EmployerController::class, 'createCompany'])->name('employer.create-company');
 });
 
 require __DIR__ . '/auth.php';
