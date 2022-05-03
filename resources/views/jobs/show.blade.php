@@ -11,7 +11,8 @@
           <div class="single-job-items mb-50">
             <div class="job-items">
               <div class="company-img company-img-details">
-                <a href="#"><img src="{{ asset('/img/icon/job-list1.png') }}" alt=""></a>
+                <a href="#"><img src="{{ asset('/img/' . $job->employer->logo) }}" alt="company logo"
+                    style="width: 100px; height: 100px;"></a>
               </div>
               <div class="job-tittle">
                 <a href="#">
@@ -41,11 +42,9 @@
                 <h4>Required Knowledge, Skills, and Abilities</h4>
               </div>
               <ul>
-                <li>System Software Development</li>
-                <li>Mobile Applicationin iOS/Android/Tizen or other platform</li>
-                <li>Research and code , libraries, APIs and frameworks</li>
-                <li>Strong knowledge on software development life cycle</li>
-                <li>Strong problem solving and debugging skills</li>
+                @foreach ($job->requirement->skills as $skill)
+                  <li>{{ $skill }}</li>
+                @endforeach
               </ul>
             </div>
             <div class="post-details2  mb-50">
@@ -54,11 +53,8 @@
                 <h4>Education + Experience</h4>
               </div>
               <ul>
-                <li>{{ $job->requirement->education_level }} level of education</li>
-                <li>{{ $job->requirement->experience }} or more years of experience</li>
-                <li>Ecommerce website design experience</li>
-                <li>Familiarity with mobile and web apps preferred</li>
-                <li>Experience using Invision a plus</li>
+                <li>{{ $job->requirement->education_level }} level of education.</li>
+                <li>{{ $job->requirement->experience }} of experience (or more).</li>
               </ul>
             </div>
           </div>
@@ -76,10 +72,10 @@
               <li>Location : <span>{{ Str::substr($job->employer->location, 0, 20) }}</span></li>
               <li>Positions : <span>{{ $job->positions }}</span></li>
               <li>Job nature : <span>{{ $job->requirement->contract_type }}</span></li>
-              <li>Salary : <span>$7,800 yearly</span></li>
+              {{-- <li>Salary : <span>$7,800 yearly</span></li> --}}
               <li>Application deadline : <span>{{ $job->deadline }}</span></li>
             </ul>
-            <div class="apply-btn2">
+            <div class="apply-btn2" @if (auth()->guard('employer')->check()) style="display: none;" @endif>
               <a href="{{ route('jobs.application-form', $job->id) }}" class="btn">Apply Now</a>
             </div>
           </div>

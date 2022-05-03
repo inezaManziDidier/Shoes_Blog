@@ -20,7 +20,21 @@ class EmployerUserSeeder extends Seeder
             [
                 'name' => 'Company X',
                 'email' => 'employer@example.com',
-                'password' => Hash::make('aaaaaaaa'), // aaaaaaaa
+                'password' => Hash::make('xxxxxxxx'), // xxxxxxxx
+            ]
+        ]);
+        EmployerUser::insert([
+            [
+                'name' => 'Company Y',
+                'email' => 'companyy@example.com',
+                'password' => Hash::make('yyyyyyyy'), // yyyyyyyyy
+            ]
+        ]);
+        EmployerUser::insert([
+            [
+                'name' => 'Company Z',
+                'email' => 'companyz@example.com',
+                'password' => Hash::make('zzzzzzzz'), // zzzzzzzz
             ]
         ]);
     }

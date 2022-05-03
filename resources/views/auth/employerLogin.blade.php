@@ -33,6 +33,8 @@
           required autocomplete="current-password" />
       </div>
       <div class="flex items-center justify-end mt-4">
+        <small class="pt-1"><b>Don't have an account?&nbsp;&nbsp;</b></small><a
+          href="{{ route('employer.signup') }}"><u>Sign up</u></a>
         <x-button class="ml-3">
           {{ __('Log in') }}
         </x-button>

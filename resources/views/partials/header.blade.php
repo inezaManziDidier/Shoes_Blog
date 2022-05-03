@@ -67,11 +67,9 @@
 
                   @if (Route::has('login'))
                     <div class="hidden fixed top-0 right-0 px-6 py-4 sm:block">
-                      @auth
-                        {{-- <a href="#"
-                          class="text-primary">
-                          <b><i class="fas fa-user"></i>
-                            {{ auth()->user()->name }}</b></a> --}}
+                      {{-- @auth --}}
+                      @if (auth()->user() ||
+                          auth()->guard('employer')->user())
                         <li class="nav-item dropdown no-arrow">
                           <a
                             class="dropdown-toggle"
@@ -82,7 +80,7 @@
                             aria-haspopup="true"
                             aria-expanded="false">
                             <b><i class="fas fa-user"></i>
-                              {{ auth()->user()->name }}</b>
+                              {{ auth()->user()->name ??auth()->guard('employer')->user()->name }}</b>
                           </a>
                           <!-- Dropdown - User Information -->
                           <div
@@ -90,12 +88,15 @@
                             aria-labelledby="userDropdown">
                             <a class="dropdown-item" href="#"
                               onclick="event.preventDefault();
-                                                          document.getElementById('logout-form').submit();">
+                                                              document.getElementById('logout-form').submit();">
                               <i
                                 class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                               {{ __('Logout') }}
                             </a>
-                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                            <form id="logout-form"
+                              action="{{ auth()->guard('employer')->check()? route('employer.logout'): route('logout') }}"
+                              method="{{ auth()->guard('employer')->check()? 'GET': 'POST' }}"
+                              style="display: none;">
                               @csrf
                             </form>
                           </div>
@@ -106,7 +107,8 @@
                         @if (Route::has('register'))
                           <a href="{{ route('register') }}" class="btn head-btn2">Register</a>
                         @endif
-                      @endauth
+                        {{-- @endauth --}}
+                      @endif
                     </div>
                   @endif
                 </div>
@@ -122,3 +124,8 @@
     </div>
     <!-- Header End -->
   </header>
+  @if (session()->has('errorDoubleLogin'))
+    <div class="alert alert-danger text-center" style="width: 60%;margin: auto;">
+      {{ session('errorDoubleLogin') }}
+    </div>
+  @endif

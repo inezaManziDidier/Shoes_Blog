@@ -4,7 +4,7 @@
   <div class="container">
     <div class="row mt-4 mb-4">
       <div class="col-xl-4">
-        <a href="{{ route('employers.create-job') }}" class="btn post-btn mt-2">Post a job</a>
+        <a href="{{ route('employer.create-job') }}" class="btn post-btn mt-2">Post a job</a>
       </div>
       <div class="col-xl-8">
         <!-- form -->
@@ -74,7 +74,8 @@
               <div class="job-items">
                 <div class="company-img">
                   <a href="{{ route('jobs.show', $job->id) }}"><img
-                      src="{{ asset('/img/icon/job-list1.png') }}" alt=""></a>
+                      src="{{ asset('/img/' . $job->employer->logo) }}" alt="company logo"
+                      style="width: 200px; height: 150px;"></a>
                 </div>
                 <div class="job-tittle">
                   <a href="{{ route('jobs.show', $job->id) }}">

@@ -11,6 +11,10 @@ class JobRequirement extends Model
 
     protected $guarded = [];
 
+    protected $casts = [
+        'skills' => 'array'
+    ];
+
     public function job()
     {
         return $this->belongsTo(Job::class);

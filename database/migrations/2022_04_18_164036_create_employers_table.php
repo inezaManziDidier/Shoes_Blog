@@ -15,6 +15,8 @@ class CreateEmployersTable extends Migration
     {
         Schema::create('employers', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('employer_user_id');
+            $table->foreign('employer_user_id')->references('id')->on('employer_users')->onDelete('cascade');
             $table->string('company')->unique();
             $table->string('location');
             $table->text('description');

@@ -7,20 +7,23 @@ use App\Http\Controllers\Auth\EmailVerificationPromptController;
 use App\Http\Controllers\Auth\EmployerAuthController;
 use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
+use App\Http\Controllers\Auth\RegisteredEmployerUserController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware('guest')->group(function () {
+Route::middleware(['checkDoubleAuth', 'guest'])->group(function () {
     Route::get('register', [RegisteredUserController::class, 'create'])
         ->name('register');
+    Route::get('employer/register', [RegisteredEmployerUserController::class, 'create'])
+        ->name('employer.signup');
 
     Route::post('register', [RegisteredUserController::class, 'store']);
+    Route::post('employer/register', [RegisteredEmployerUserController::class, 'store'])->name('employer.register');
 
     Route::get('login', [AuthenticatedSessionController::class, 'create'])
         ->name('login');
     Route::get('/employer/login', [EmployerAuthController::class, 'showLoginForm'])->name('employer.login');
-
 
     Route::post('login', [AuthenticatedSessionController::class, 'store']);
     Route::post('/employer/login', [EmployerAuthController::class, 'login'])->name('employer.store');
@@ -58,5 +61,4 @@ Route::middleware('auth')->group(function () {
     Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
         ->name('logout');
 });
-
-Route::get('/employer/logout', [EmployerAuthController::class, 'logout'])->name('employer.logout');
+Route::get('employer/logout', [EmployerAuthController::class, 'logout'])->name('employer.logout');

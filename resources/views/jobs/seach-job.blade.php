@@ -16,7 +16,8 @@
             <div class="job-items">
               <div class="company-img">
                 <a href="{{ route('jobs.show', $job->id) }}"><img
-                    src="{{ asset('/img/icon/job-list1.png') }}" alt=""></a>
+                    src="{{ asset('/img/' . $job->employer->logo) }}" alt="company logo"
+                    style="width: 100px;height: 100px;"></a>
               </div>
               <div class="job-tittle">
                 <a href="{{ route('jobs.show', $job->id) }}">

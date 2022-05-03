@@ -39,7 +39,7 @@ class EmployerAuthController extends Controller
             'email' => $request->email,
             'password' => $request->password,
         ])) {
-            $user = auth()->user();
+            $user = auth()->guard('employer')->user();
 
             return redirect()->intended(url('/employer/dashboard'));
         } else {

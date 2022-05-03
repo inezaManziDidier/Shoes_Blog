@@ -35,11 +35,14 @@ class JobsController extends Controller
         if ($keyword) {
             $jobs = Job::where('title', 'LIKE', '%' . $keyword . '%')
                 ->orWhere('employer_id', $employerId)
+                ->orderBy('created_at', 'desc')
                 ->get();
             return view('jobs.seach-job', compact('jobs', 'keyword'));
         }
         $keyword = request('by_company');
-        $jobs = Job::where('employer_id', $employerId)->get();
+        $jobs = Job::where('employer_id', $employerId)
+            ->orderBy('created_at', 'desc')
+            ->get();
         return view('jobs.seach-job', compact('jobs', 'keyword'));
     }
 
