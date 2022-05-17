@@ -131,3 +131,8 @@
       {{ session('errorDoubleLogin') }}
     </div>
   @endif
+@if (session()->has('errorAdmin'))
+    <div class="alert alert-danger text-center" style="width: 60%;margin: auto;">
+      {{ session('errorAdmin') }}
+    </div>
+  @endif

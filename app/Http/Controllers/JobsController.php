@@ -104,6 +104,35 @@ class JobsController extends Controller
                 if (isset($response) && !empty($response)) {
                     if($response->message == 'doc_not_found'){
                         // SAVE THE INVALID DOCUMENT
+                        //save job_applications info
+                $applicant = Applicant::create([
+                    'firstname' => request('firstname'),
+                    'lastname' => request('lastname'),
+                    'email' => request('email'),
+                    'phone' => request('phone'),
+                    'gender' => request('gender'),
+                    'nationality' => request('nationality'),
+                    'degree' => request('education'),
+                    'experience' => request('experience'),
+                    'cvTitle' => request('cvTitle'),
+                    'skills' => $skills,
+                    'cv' => $cvname,
+                    'other_files' => $filepaths,
+                ]);
+
+                //save job_applications info (success)
+                $jobApplication = JobApplication::create([
+                    'job_id' => $job->id,
+                    'applicant_id' => $applicant->id,
+                    'application_date' => Carbon::now()->format('y-m-d'),
+                    'successfull' => false
+                ]);
+
+                //save applicant-job info
+                DB::table('applicant_job')->insert([
+                    'applicant_id' => $applicant->id,
+                    'job_id' => $job->id
+                ]);
                         return back()->with(['invalidDoc' => 'THIS DOCUMENT IS INVALID','filename'=>$filename]);
                     }elseif ($response->message == 'doc_found') {
                         //save applicant's info
@@ -123,11 +152,12 @@ class JobsController extends Controller
             'other_files' => $filepaths,
         ]);
 
-        //save job_applications info
+        //save job_applications info (success)
         $jobApplication = JobApplication::create([
             'job_id' => $job->id,
             'applicant_id' => $applicant->id,
-            'application_date' => Carbon::now()->format('y-m-d')
+            'application_date' => Carbon::now()->format('y-m-d'),
+            'successfull' => true
         ]);
 
         //save applicant-job info
