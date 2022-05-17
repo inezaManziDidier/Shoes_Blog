@@ -5,6 +5,35 @@ use App\Http\Controllers\EmployerController;
 use App\Http\Controllers\HomepageController;
 use App\Http\Controllers\JobsController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
+use thiagoalessio\TesseractOCR\TesseractOCR;
+
+Route::get('/test', function () {
+    return view('test');
+});
+Route::post('/test', function (Request $request) {
+    // $request->validate([
+    //     'cv' => 'required|file|mimes:jpg,png,pdf',
+    // ]);
+    $cvname = $request->file('cv')->getClientOriginalName();
+    $path = $request->file('cv')->move('files', $cvname);
+    $data = (new TesseractOCR(public_path('files/' . $cvname)))
+        ->executable('C:\Program Files\Tesseract-OCR\tesseract.exe')
+        ->run();
+        
+        // $data = urlencode($data);
+        // $data = str_replace("%0A",'%20',$data);
+        // $data = str_replace("%0A",'',$data);
+        // $data = str_replace("+",'%20',$data);
+        // $data = str_replace("%20%20",'%20',$data);
+        echo($data);
+        // dd('http://localhost:9000/api/jobportal/document/' . $data);
+    // $client = new \GuzzleHttp\Client();
+    // $req = $client->get('http://localhost:9000/api/jobportal/document/' . $data);
+    // $response = json_decode($req->getBody());
+    // // if (isset($response) && !empty($response)) {}
+    // echo ($response->message);
+});
 
 Route::get('/', [HomepageController::class, 'index'])->name('homepage');
 

@@ -9,13 +9,18 @@
         {{ session('message') }}
       </div>
     @endif
+    @if (session()->has('invalidDoc'))
+      <div class="alert alert-danger text-center">
+        {{ session('invalidDoc') }} <a class="text-primary" href="{{asset('/files/' . session('filename'))}}">{{session('filename')}}</a>
+      </div>
+    @endif
     <form action="{{ route('jobs.apply', $job->id) }}" method="POST" accept-charset="utf-8"
       enctype="multipart/form-data">
       @csrf
       <div class="form-group">
         <small style="margin-left: 4px;"><b>Job<b></small><br>
         <input type="text" class="form-control" id="job" name="job"
-          value="{{ $job->title }}">
+          value="{{ $job->title }}" disabled>
       </div>
       <div class="row">
         <div class="form-group col-md-6">
@@ -81,12 +86,12 @@
         <input type="file" class="form-control" id="cv" name="cv" required>
       </div>
       <div class="form-group">
-        <small style="margin-left: 4px;"><b>Attach other files (if any)<b></small><br>
+        <small style="margin-left: 4px;"><b>Attach other files (degree/certificate) jpeg,jpg,png<b></small><br>
         @error('other-files')
           <small class="text-danger">{{ $message }}</small>
         @enderror
         <input type="file" class="form-control" id="other-files" name="other-files[]" multiple>
-        {{-- <small style="margin-left: 4px;">maximun 2 files</small> --}}
+        <small style="margin-left: 4px;">maximun 2 files</small>
       </div>
       <div class="row">
         <div class="form-group col-md-6">

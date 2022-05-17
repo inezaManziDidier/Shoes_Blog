@@ -10,6 +10,7 @@ use App\Models\JobApplication;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use thiagoalessio\TesseractOCR\TesseractOCR;
 
 class JobsController extends Controller
 {
@@ -68,7 +69,7 @@ class JobsController extends Controller
             'gender' => 'required',
             'cvTitle' => 'required|max:20',
             'cv' => 'required|file|mimes:doc,docx,pdf',
-            'other-files.*' => 'mimes:doc,docx,pdf',
+            'other-files.*' => 'mimes:jpg,jpeg,png',
             'education' => 'required',
             'experience' => 'required',
             'skills' => 'required',
@@ -85,10 +86,27 @@ class JobsController extends Controller
                 $filename = time() . '_' . $file->getClientOriginalName();
                 $filepath = $file->move('files', $filename);
                 $filepaths[] = $filename;
-            }
-        }
 
-        //save applicant's info
+                //CHECK DOCUMENTS AUTHENTICITY
+                $data = (new TesseractOCR(public_path('files/'.$filename)))
+                ->executable('C:\Program Files\Tesseract-OCR\tesseract.exe')
+                ->run();
+                $data = urlencode($data);
+                $data = str_replace("%0A",'%20',$data);
+                $data = str_replace("%0A",'',$data);
+                $data = str_replace("+",'%20',$data);
+                $data = str_replace("%20%20",'%20',$data);
+                // dd('http://localhost:9000/api/jobportal/document/' . $data);
+                $client = new \GuzzleHttp\Client();
+                $req = $client->get('http://localhost:9000/api/jobportal/document/' . $data);
+                $response = json_decode($req->getBody());
+                // dd($response);
+                if (isset($response) && !empty($response)) {
+                    if($response->message == 'doc_not_found'){
+                        // SAVE THE INVALID DOCUMENT
+                        return back()->with(['invalidDoc' => 'THIS DOCUMENT IS INVALID','filename'=>$filename]);
+                    }elseif ($response->message == 'doc_found') {
+                        //save applicant's info
         $skills = explode(PHP_EOL, request('skills'));
         $applicant = Applicant::create([
             'firstname' => request('firstname'),
@@ -118,6 +136,12 @@ class JobsController extends Controller
             'job_id' => $job->id
         ]);
 
-        return back()->with('message', 'application successfully submited');
+        // SAVE THE VALID DOCUMENT
+        return back()->with('message', 'application successfully submited. ALL DOCUMENTS ARE VALID');
+                    }
+                }
+            }
+        }
+        
     }
 }
