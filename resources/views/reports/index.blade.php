@@ -11,14 +11,14 @@
                     <div class="col mr-2">
                       <div
                         class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                        Total Job applications
+                        CURRENT MONTH APPLICATIONS
                       </div>
                       <div class="h5 mb-0 font-weight-bold text-gray-800">
-                        {{empty($applications) ? 0 : count($applications)}}
+                        {{empty($current_applications) ? 0 : count($current_applications)}}
                       </div>
                     </div>
                     <div class="col-auto">
-                      <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                      <a href="{{ route('reports.index.pdf', ['month' => 'current']) }}" class="btn btn-sm btn-primary">Export to pdf</a>
                     </div>
                   </div>
                 </div>
@@ -32,14 +32,14 @@
                     <div class="col mr-2">
                       <div
                         class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                        Successfull applications
+                        APPLICATIONS OF <b style="text-uppercase">{{$previous_month}} {{$year}}</b>
                       </div>
                       <div class="h5 mb-0 font-weight-bold text-gray-800">
-                        {{empty($success) ? 0 : count($success)}}
+                        {{empty($current1_applications) ? 0 : count($current1_applications)}}
                       </div>
                     </div>
                     <div class="col-auto">
-                      <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                      <a href="{{ route('reports.index.pdf', ['month' => 'current-1']) }}" class="btn btn-sm btn-primary">Export to pdf</a>
                     </div>
                   </div>
                 </div>
@@ -53,13 +53,13 @@
                     <div class="col mr-2">
                       <div
                         class="text-xs font-weight-bold text-info text-uppercase mb-1">
-                        Failed applications
+                        APPLICATIONS OF <b style="text-uppercase">{{$previous_month2}} {{$year}}</b>
                       </div>
                       <div class="row no-gutters align-items-center">
                         <div class="col-auto">
                           <div
                             class="h5 mb-0 mr-3 font-weight-bold text-gray-800">
-                            {{empty($failed) ? 0 : count($failed)}}
+                            {{empty($current2_applications) ? 0 : count($current2_applications)}}
                           </div>
                         </div>
                         <div class="col">
@@ -67,8 +67,7 @@
                       </div>
                     </div>
                     <div class="col-auto">
-                      <i
-                        class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                      <a href="{{ route('reports.index.pdf', ['month' => 'current-2']) }}" class="btn btn-sm btn-primary">Export to pdf</a>
                     </div>
                   </div>
                 </div>

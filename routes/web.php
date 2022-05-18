@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use thiagoalessio\TesseractOCR\TesseractOCR;
 use App\Mail\JobApplicationConfirmation;
+use App\Http\Controllers\ReportsController;
 
 Route::get('/', [HomepageController::class, 'index'])->name('homepage');
 
@@ -28,6 +29,8 @@ Route::get('/admin/jobs', [DashboardController::class, 'jobs'])->name('admin.job
 Route::get('/admin/companies', [DashboardController::class, 'companies'])->name('admin.companies')->middleware(['auth','admin']);
 Route::get('/admin/job_applications', [DashboardController::class, 'job_applications'])->name('admin.job_applications')->middleware(['auth','admin']);
 Route::get('/admin/users', [DashboardController::class, 'users'])->name('admin.users')->middleware(['auth','admin']);
+Route::get('admin/reports/montly', [ReportsController::class, 'index'])->name('reports.index')->middleware(['auth','admin']);
+Route::get('admin/reports/montly/pdf', [ReportsController::class, 'report_pdf'])->name('reports.index.pdf');
 
 Route::group(['middleware' => ['auth:employer']], function () {
     Route::get('employer/dashboard', [EmployerController::class, 'dashboard'])->name('employer.dashboard');

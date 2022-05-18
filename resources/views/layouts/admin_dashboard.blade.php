@@ -92,8 +92,8 @@
           data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Generate reports:</h6>
-            <a class="collapse-item" href="#">Report 1</a>
-            <a class="collapse-item" href="#">Report 2</a>
+            <a class="collapse-item" href="{{route('reports.index')}}">Montly applications</a>
+            <!-- <a class="collapse-item" href="#">Report 2</a> -->
           </div>
         </div>
       </li>
