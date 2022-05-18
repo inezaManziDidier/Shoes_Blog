@@ -11,6 +11,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use thiagoalessio\TesseractOCR\TesseractOCR;
+use App\Mail\JobApplicationConfirmation;
 
 class JobsController extends Controller
 {
@@ -59,6 +60,7 @@ class JobsController extends Controller
 
     public function apply(Request $request, Job $job)
     {
+        set_time_limit(300);
         // VALIDATE
         $request->validate([
             'firstname' => 'required|max:20',
@@ -96,15 +98,16 @@ class JobsController extends Controller
                 $data = str_replace("%0A",'',$data);
                 $data = str_replace("+",'%20',$data);
                 $data = str_replace("%20%20",'%20',$data);
-                // dd('http://localhost:9000/api/jobportal/document/' . $data);
                 $client = new \GuzzleHttp\Client();
                 $req = $client->get('http://localhost:9000/api/jobportal/document/' . $data);
                 $response = json_decode($req->getBody());
                 // dd($response);
                 if (isset($response) && !empty($response)) {
                     if($response->message == 'doc_not_found'){
-                        // SAVE THE INVALID DOCUMENT
-                        //save job_applications info
+                        
+                // SAVE THE INVALID DOCUMENT
+                $skills = explode(PHP_EOL, request('skills'));
+                //save job_applications info
                 $applicant = Applicant::create([
                     'firstname' => request('firstname'),
                     'lastname' => request('lastname'),
@@ -133,9 +136,18 @@ class JobsController extends Controller
                     'applicant_id' => $applicant->id,
                     'job_id' => $job->id
                 ]);
+                // SEND CONFIRMATION EMAIL
+                $details = [
+                    'title' => 'Mail from Job portal app',
+                    'body' => 'The provided document is not valid.Please provide a valid document and try again.Thank you for using our app!'];
+
+                \Mail::to(auth()->user()->email)->send(new JobApplicationConfirmation($details));
+
                         return back()->with(['invalidDoc' => 'THIS DOCUMENT IS INVALID','filename'=>$filename]);
                     }elseif ($response->message == 'doc_found') {
-                        //save applicant's info
+
+        // SAVE THE VALID DOCUMENT
+        //save applicant's info
         $skills = explode(PHP_EOL, request('skills'));
         $applicant = Applicant::create([
             'firstname' => request('firstname'),
@@ -166,7 +178,13 @@ class JobsController extends Controller
             'job_id' => $job->id
         ]);
 
-        // SAVE THE VALID DOCUMENT
+        // SEND CONFIRMATION EMAIL
+                $details = [
+                    'title' => 'Mail from Job portal app',
+                    'body' => 'Thank you for using our app! We have successfully saved
+                                your job application'];
+
+                \Mail::to(auth()->user()->email)->send(new JobApplicationConfirmation($details));
         return back()->with('message', 'application successfully submited. ALL DOCUMENTS ARE VALID');
                     }
                 }

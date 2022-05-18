@@ -7,33 +7,7 @@ use App\Http\Controllers\JobsController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use thiagoalessio\TesseractOCR\TesseractOCR;
-
-Route::get('/test', function () {
-    return view('test');
-});
-Route::post('/test', function (Request $request) {
-    // $request->validate([
-    //     'cv' => 'required|file|mimes:jpg,png,pdf',
-    // ]);
-    $cvname = $request->file('cv')->getClientOriginalName();
-    $path = $request->file('cv')->move('files', $cvname);
-    $data = (new TesseractOCR(public_path('files/' . $cvname)))
-        ->executable('C:\Program Files\Tesseract-OCR\tesseract.exe')
-        ->run();
-        
-        // $data = urlencode($data);
-        // $data = str_replace("%0A",'%20',$data);
-        // $data = str_replace("%0A",'',$data);
-        // $data = str_replace("+",'%20',$data);
-        // $data = str_replace("%20%20",'%20',$data);
-        echo($data);
-        // dd('http://localhost:9000/api/jobportal/document/' . $data);
-    // $client = new \GuzzleHttp\Client();
-    // $req = $client->get('http://localhost:9000/api/jobportal/document/' . $data);
-    // $response = json_decode($req->getBody());
-    // // if (isset($response) && !empty($response)) {}
-    // echo ($response->message);
-});
+use App\Mail\JobApplicationConfirmation;
 
 Route::get('/', [HomepageController::class, 'index'])->name('homepage');
 
@@ -43,9 +17,9 @@ Route::post('/jobs/search', [JobsController::class, 'search'])->name('jobs.searc
 
 Route::get('/jobs/{job}', [JobsController::class, 'show'])->name('jobs.show');
 
-Route::get('/jobs/{job}/apply', [JobsController::class, 'showApplicationForm'])->name('jobs.application-form');
+Route::get('/jobs/{job}/apply', [JobsController::class, 'showApplicationForm'])->name('jobs.application-form')->middleware('auth');
 
-Route::post('/jobs/{job}/apply', [JobsController::class, 'apply'])->name('jobs.apply');
+Route::post('/jobs/{job}/apply', [JobsController::class, 'apply'])->name('jobs.apply')->middleware('auth');
 
 
 Route::get('/admin', [DashboardController::class, 'index'])->name('admin.dashboard')->middleware(['auth','admin']);
