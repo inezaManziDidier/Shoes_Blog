@@ -37,6 +37,8 @@ Route::group(['middleware' => ['auth:employer']], function () {
     Route::get('employer/create-job', [EmployerController::class, 'createJob'])->name('employer.create-job');
     Route::post('employer/create-job', [EmployerController::class, 'store'])->name('employer.store-job');
     Route::post('employer/create-company', [EmployerController::class, 'createCompany'])->name('employer.create-company');
+    Route::get('employer/jobs/{employer}', [EmployerController::class, 'show'])->name('employer.jobs');
+    Route::get('employer/jobs/applicants/{job}', [EmployerController::class, 'showApplicants'])->name('employer.jobs.applicants');
 });
 
 require __DIR__ . '/auth.php';

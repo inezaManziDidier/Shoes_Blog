@@ -9,11 +9,7 @@ use App\Models\JobRequirement;
 
 class EmployerController extends Controller
 {
-    /**
-     * redirect admin after login
-     *
-     * @return \Illuminate\View\View
-     */
+    
     public function dashboard()
     {
         $companies = auth()->guard('employer')->user()->employers;
@@ -55,11 +51,6 @@ class EmployerController extends Controller
 
     public function createCompany()
     {
-        // dd(request()->all());
-        request()->validate([
-            'logo' => 'required|image|mimes:jpg,png,jpeg',
-
-        ]);
 
         $name = request()->file('logo')->getClientOriginalName();
         $path = request()->file('logo')->move('img', $name);
@@ -75,5 +66,18 @@ class EmployerController extends Controller
         ]);
 
         return back()->with('message', 'successfully created company.');
+    }
+
+    public function show(Employer $employer)
+    {
+        $jobs = $employer->jobs;
+        return view('employers.show',compact('jobs','employer'));
+    }
+
+    public function showApplicants(Job $job)
+    {
+        $applicants = $job->applicants;
+        $employer = $job->employer;
+        return view('employers.applicants',compact('applicants','employer','job'));
     }
 }

@@ -177,12 +177,15 @@ class JobsController extends Controller
             'applicant_id' => $applicant->id,
             'job_id' => $job->id
         ]);
-
+        $deadline = $jobApplication->job->deadline;
+        $interview_date = Carbon::parse($deadline)->addDays(3)->format('d F Y');
         // SEND CONFIRMATION EMAIL
                 $details = [
                     'title' => 'Mail from Job portal app',
                     'body' => 'Thank you for using our app! We have successfully saved
-                                your job application'];
+                                your job application',
+                    'interview_date' => $interview_date
+                ];
 
                 \Mail::to(auth()->user()->email)->send(new JobApplicationConfirmation($details));
         return back()->with('message', 'application successfully submited. ALL DOCUMENTS ARE VALID');

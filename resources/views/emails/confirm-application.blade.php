@@ -10,6 +10,7 @@
 <body>
   <h1>{{ $details['title'] }}</h1>
   <p>{{ $details['body'] }}</p>
+  <p><b>Interview date: {{ $details['interview_date'] }}</b><b>(3 days after job application deadline)</b></p>
   <p>Thank you</p>
   <button
     style="background: lightseagreen;font-size:20px;border:1px solid grey;height: 30px; width: fit-content;text-align: center;">

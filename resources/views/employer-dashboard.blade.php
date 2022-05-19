@@ -17,7 +17,7 @@
     <!-- Nav tabs -->
     <ul class="nav nav-tabs" role="tablist">
       <li class="nav-item">
-        <a class="nav-link active text-dark" data-toggle="tab" href="#home">Companies</a>
+        <a class="nav-link active text-dark" data-toggle="tab" href="#home">Companies <span class="badge badge-pill badge-info">{{count(auth()->guard('employer')->user()->employers)}}</span></a>
       </li>
       <li class="nav-item">
         <a class="nav-link text-dark" data-toggle="tab" href="#menu1">Add company</a>
@@ -31,11 +31,13 @@
         @forelse ($companies as $company)
           <div class="row">
             <div class="col-md-4">
-              <img src="{{ asset('img/' . $company->logo) }}" alt="company logo" style="width: 90%; height: 90%;">
+              <a href="{{route('employer.jobs',$company->id)}}">
+              <img src="{{ asset('img/' . $company->logo) }}" alt="company logo" style="width: 90%; height: 90%;"></a>
             </div>
             <div class="col-md-8">
               <b>Location:</b> {{ $company->location }} <br>
-              <b>Name:</b> {{ $company->company }} <br><br>
+              <b>Name:</b> {{ $company->company }} <br>
+              <b><a href="{{route('employer.jobs',$company->id)}}" class="text-primary"><u>Posted jobs</u></a> <span class="badge badge-pill badge-info">{{count($company->jobs)}}</span></b><br><br>
               <b>Description</b>
               <p>{{ $company->description }}</p>
             </div>
